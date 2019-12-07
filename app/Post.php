@@ -27,13 +27,22 @@ class Post extends Model
 
         $posts = Post::latest();
 
-        if($month = $filter['month']) {
-            $query->whereMonth('created_at', Carbon::parse($month)->month);
+        if(isset($filter['month'])) {
+            $query->whereMonth('created_at', Carbon::parse($filter['month'])->month);
         }
 
-        if($year = $filter['year']) {
-            $query->whereYear('created_at', $year);
+        if(isset($filter['year'])) {
+            $query->whereYear('created_at', $filter['year']);
         }
 
+    }
+
+    public static function archives()
+    {
+        return static::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
+        ->groupBy('year','month')
+        ->orderByRaw('min(created_at) desc')
+        ->get()
+        ->toArray();
     }
 }
