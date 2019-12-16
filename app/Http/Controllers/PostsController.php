@@ -35,7 +35,7 @@ class PostsController extends Controller
 
     public function create()
     {
-        return view('views/posts/create');
+        return view('posts/create');
     }
 
     public function store()
